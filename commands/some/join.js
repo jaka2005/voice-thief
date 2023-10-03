@@ -1,9 +1,8 @@
-const { SlashCommandBuilder, Collection } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { joinVoiceChannel, EndBehaviorType } = require("@discordjs/voice");
 const { opus } = require('prism-media')
+const { newStream } = require('../../streams'); // TODO: configure `package.json` and `src/` dir
 const fs = require('fs');
-
-const streams = new Collection();
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -33,7 +32,8 @@ module.exports = {
             console.log("finished")
             exec("ffmpeg -y -f s16le -ar 48k -ac 2 -i test.pcm test.mp3")
         });
-
-        streams.set(message.user.id, stream);
+        
+        newStream(message.user.id, stream);
+        message.reply('Join!');
     },
 };
