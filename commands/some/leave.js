@@ -8,7 +8,7 @@ module.exports = {
         .setDescription("leave the channel"),
     async execute(message) {
         stopStream(message.user.id)
-        // destroyConnection()
+        destroyConnection()
         message.reply("Leave(")
     }
 }

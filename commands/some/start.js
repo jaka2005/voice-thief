@@ -1,9 +1,11 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { joinVoiceChannel, EndBehaviorType, createAudioResource, createAudioPlayer, AudioPlayerStatus } = require("@discordjs/voice");
+const { opus } = require('prism-media')
 const { stopStream } = require('../../streams.js');
 const { getConnection } = require("../../connection");
 const { newStream } = require('../../streams');
 const fs = require('fs');
+const { error } = require("console");
 
 
 module.exports = {
@@ -34,16 +36,15 @@ module.exports = {
                 console.log("start record")
                 const audioStream = connection.receiver.subscribe(message.user.id, { mode: 'pcm' });
         
-                // const decoder = new opus.Decoder({ frameSize: 960, channels: 2, rate: 48000 });
-                const outputStream = fs.createWriteStream("./test.pcm", { flags: 'a' });
-                const stream = audioStream.pipe(outputStream);
-                outputStream.on("data", console.log);
+                const decoder = new opus.Decoder({ frameSize: 960, channels: 2, rate: 48000 });
+                // const outputStream = fs.writeFileSync("./test.pcm");
+                const stream = audioStream.pipe(decoder).pipe(fs.createWriteStream("./test.pcm"));
 
-                // audioStream.on('data', (chunk) => {
-                    
-                // });
+                audioStream.on('data', (chunk) => {
+                    console.log(chunk)
+                });
         
-                stream.on("finish", () => {
+                audioStream.on("finish", () => {
                     connection.destroy();
                     console.log("finished");
                 });
