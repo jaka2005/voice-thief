@@ -1,12 +1,9 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { joinVoiceChannel, EndBehaviorType, createAudioResource, createAudioPlayer, AudioPlayerStatus } = require("@discordjs/voice");
+const { createAudioResource, createAudioPlayer, AudioPlayerStatus } = require("@discordjs/voice");
 const { opus } = require('prism-media')
-const { stopStream } = require('../../streams.js');
 const { getConnection } = require("../../connection");
 const { newStream } = require('../../streams');
 const fs = require('fs');
-const { error } = require("console");
-
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -50,6 +47,8 @@ module.exports = {
                 });
                 
                 newStream(message.user.id, stream);
+
+                audioResource.destroy()
             }
         });
     }

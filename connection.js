@@ -1,4 +1,4 @@
-const { joinVoiceChannel, VoiceConnection } = require("@discordjs/voice");
+const { joinVoiceChannel } = require("@discordjs/voice");
 
 let connection;
 
